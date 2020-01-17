@@ -1,4 +1,4 @@
-from rectangulo import Rectangulo
+from ejemplos.rectangulo import Rectangulo
 
 
 class Cuadrado(Rectangulo):
