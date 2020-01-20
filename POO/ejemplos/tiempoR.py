@@ -83,12 +83,47 @@ class Tiempo:
         :return:
         """
         seg = Tiempo.__segundos_total(self) + minutos * 60
-        assert seg > 0  # si los segundos son negativos el estado es inconsistente
+        assert seg >= 0  # si los segundos son negativos el estado es inconsistente
         result = Tiempo.__segundos_a_tiempo(seg)
         self.__horas, self.__minutos, self.__segundos = result.horas, result.minutos, result.segundos
 
     def resta_minutos(self, minutos):
         self.suma_minutos(-minutos)
+
+    def suma_segundos(self, segundos):
+        """
+        Suma minutos al objeto. Si las horas finales son negativas lanza una excepción
+        :param segundos:
+        :return:
+        """
+        seg = Tiempo.__segundos_total(self) + segundos
+        assert seg >= 0  # si los segundos son negativos el estado es inconsistente
+        result = Tiempo.__segundos_a_tiempo(seg)
+        self.__horas, self.__minutos, self.__segundos = result.horas, result.minutos, result.segundos
+
+    def resta_segundos(self, segundos):
+        self.suma_segundos(-segundos)
+
+    def suma(self, t):
+        """
+        Suma otro objeto tiempo.
+        :param t:
+        :return:
+        """
+        seg = Tiempo.__segundos_total(self) + t.horas * 3600 + t.minutos * 60 + t.segundos
+        result = Tiempo.__segundos_a_tiempo(seg)
+        self.__horas, self.__minutos, self.__segundos = result.horas, result.minutos, result.segundos
+
+    def resta(self, t):
+        """
+        Resta otro objeto tiempo. Si las horas finales son negativas lanza una excepción
+        :param t:
+        :return:
+        """
+        seg = Tiempo.__segundos_total(self) - t.horas * 3600 - t.minutos * 60 - t.segundos
+        assert seg >= 0  # si el tiempo son negativos el estado es inconsistente
+        result = Tiempo.__segundos_a_tiempo(seg)
+        self.__horas, self.__minutos, self.__segundos = result.horas, result.minutos, result.segundos
 
     # Métodos estáticos
 
@@ -113,4 +148,7 @@ if __name__ == '__main__':  # CLarisimo
     print(f"Ahora T1 es {t1}")
     m = int(input(f"Minutos a sumar a {t1}"))
     t1.suma_minutos(m)
+    print(f"Ahora T1 es {t1}")
+    s = int(input(f"Segundos a sumar a {t1}"))
+    t1.suma_segundos(s)
     print(f"Ahora T1 es {t1}")
