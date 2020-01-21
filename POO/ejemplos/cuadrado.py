@@ -4,7 +4,7 @@ from ejemplos.rectangulo import Rectangulo
 class Cuadrado(Rectangulo):
     """
     Implementamos la clase Cuadrado partiendo de la clase Rectángulo.
-    Consideramos que un cuadrado es un rectánfulo con base==altura.
+    Consideraremos que un cuadrado es un rectángulo con base==altura.
     """
 
     def __init__(self, lado):
@@ -12,7 +12,7 @@ class Cuadrado(Rectangulo):
 
     @property
     def lado(self):
-        return self.__base
+        return self.base
 
     @lado.setter
     def lado(self, value):

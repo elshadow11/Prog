@@ -1,12 +1,10 @@
 class Rectangulo:
     """
-    Versión 3.0.
+    Versión 3.1.
     Esta clase representa objetos de tipo rectángulo.
     Acciones: cálculo del perímetro, área, dibujar, comparar.
-    Mejoras respecto a la versión 2:
-    - Quitamos getters y setters estilo Java y los sustituimos por propiedades.
-    - Usaremos métodos privados y estáticos.
-    - Usaremos variables de instancia de clase.
+    Mejoras respecto a la versión 3.1:
+    Creación de destructor
     """
     lado_maximo = 10  # lado máximo del rectángulo
     __num_creados = 0  # contador de rectángulos creados
@@ -53,7 +51,7 @@ class Rectangulo:
     # resto métodos
 
     @staticmethod
-    def num_rectangulos():
+    def num_creados():
         return Rectangulo.__num_creados
 
     @staticmethod
@@ -104,6 +102,35 @@ class Rectangulo:
             str += "\n"
         str = str[:-1]
         return str
+
+    def __mul__(self, other):
+        """
+        Multiplica la base sinó se pasa del lado máximo, en ese caso lo hace con la altura.
+        :param other: Valor entero positivo
+        :return: Otrorectángulo con la superficie original * other.
+        """
+        assert type(other) == type(1) and other > 0  # operando corecto
+        assert self.base * other <= Rectangulo.lado_maximo or self.altura * other <= Rectangulo.lado_maximo
+        if self.base * other <= Rectangulo.lado_maximo:
+            return Rectangulo(self.base * other, self.altura)
+        else:
+            return Rectangulo(self.base, self.altura * other)
+
+    def __rmul__(self, other):
+
+        return self * other
+
+    def __lt__(self, other):
+        assert isinstance(other, Rectangulo)
+        return self.area() < other.area()
+
+    def __le__(self, other):
+        assert isinstance(other, Rectangulo)
+        return self.area() <= other.area()
+
+    def __eq__(self, other):
+        assert isinstance(other, Rectangulo)
+        return self.area() == other.area()
 
 
 if __name__ == "__main__":
