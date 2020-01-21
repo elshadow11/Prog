@@ -1,5 +1,5 @@
 """
-Crea métidos para:
+Crea métodos para:
 
     Sumar y restar otro objeto de la clase Tiempo.
     Sumar y restar segundos, minutos y/o horas.
