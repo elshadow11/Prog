@@ -57,11 +57,11 @@ def fecha_correcta(fecha_):
         return False
     # Si es año bisiesto el nº de días de febrero es 29.
     # Llamo a una función que me actualiza el nº de días de febrero si es bisiesto
-    dias_mes_este_año = dias_mes_año(fecha_)
+    dias_mes_este_anno = dias_mes_anno(fecha_)
     dia_ = dia(fecha_)
     # esta expresión lógica la permite python, equivale a:
-    #   dia_>0 and dia_<=dias_mes_este_año[mes_-1]
-    return 0 < dia_ <= dias_mes_este_año[mes_ - 1]  # restamos 1 al mes para que esté entre 0 y 11
+    #   dia_>0 and dia_<=dias_mes_este_anno[mes_-1]
+    return 0 < dia_ <= dias_mes_este_anno[mes_ - 1]  # restamos 1 al mes para que esté entre 0 y 11
 
 
 def fecha_mas_1dia(fecha_):
@@ -77,11 +77,11 @@ def fecha_mas_1dia(fecha_):
     """
     dia_ = dia(fecha_)
     mes_ = mes(fecha_)
-    año_ = año(fecha_)
-    dias_mes_este_año = dias_mes_año(fecha_)
+    anno_ = anno(fecha_)
+    dias_mes_este_anno = dias_mes_anno(fecha_)
 
     # aumentamos el día
-    ultimo_dia_mes = dias_mes_este_año[mes_ - 1]
+    ultimo_dia_mes = dias_mes_este_anno[mes_ - 1]
     dia_ += 1
     if dia_ > ultimo_dia_mes:  # mes siguiente si no es 29/2 y bisiesto
         # mes siguiente
@@ -89,8 +89,8 @@ def fecha_mas_1dia(fecha_):
         mes_ += 1
         if mes_ > 12:  # nos pasamos de diciembre, año siguiente
             mes_ = 1
-            año_ += 1
-    return fecha(dia_, mes_, año_)
+            anno_ += 1
+    return fecha(dia_, mes_, anno_)
 
 
 def fecha_mas_n_dias(fecha_, dias_):
@@ -128,17 +128,17 @@ def fecha_menos_1dia(fecha_):
     """
     dia_ = dia(fecha_)
     mes_ = mes(fecha_)
-    año_ = año(fecha_)
-    dias_mes_este_año = dias_mes_año(fecha_)
+    anno_ = anno(fecha_)
+    dias_mes_este_anno = dias_mes_anno(fecha_)
     # disminuimos el día
     dia_ -= 1
     if dia_ == 0:  # mes anterior y último día de mes
         mes_ -= 1
         if mes_ == 0:  # 31 de diciembre del año anterior
             mes_ = 12
-            año_ -= 1
-        dia_ = dias_mes_este_año[mes_ - 1]  # último día del mes anterior
-    return fecha(dia_, mes_, año_)
+            anno_ -= 1
+        dia_ = dias_mes_este_anno[mes_ - 1]  # último día del mes anterior
+    return fecha(dia_, mes_, anno_)
 
 
 def fecha_menos_n_dias(fecha_, dias_):
@@ -178,8 +178,8 @@ def es_bisiesto(fecha_):
     >>> es_bisiesto("01021900") # múltiplo de 4 pero acaba en 00 y no es múltiplo de 400
     False
     """
-    año_ = año(fecha_)
-    return año_ % 4 == 0 and (año_ % 100 != 0 or año_ % 400 == 0)
+    anno_ = anno(fecha_)
+    return anno_ % 4 == 0 and (anno_ % 100 != 0 or anno_ % 400 == 0)
 
 
 def compara_fechas(fecha1, fecha2):
@@ -211,17 +211,17 @@ def fecha_formateada(fecha_):
     '15 de Diciembre de 2019'
     """
     dia_ = dia(fecha_)
-    año_ = año(fecha_)
-    return str(dia_) + " de " + nombre_mes(fecha_) + " de " + str(año_)
+    anno_ = anno(fecha_)
+    return str(dia_) + " de " + nombre_mes(fecha_) + " de " + str(anno_)
 
 
-def año(fecha_):
+def anno(fecha_):
     """
     Devuelve el año de la fecha
     @param fecha_
     @return año
     Test:
-    >>> año("20200106")
+    >>> anno("20200106")
     2020
     """
     return int(fecha_[0:4])
@@ -269,14 +269,18 @@ def dia(fecha_):
 def fecha(d, m, a):
     """
     Devuelve una cadena en formato AAAAMMDD
-    @param d, m, a
     Test:
     >>> fecha(6, 1, 2020)
     '20200106'
+
+    :param d:
+    :param m:
+    :param a:
+    :return:
     """
     dia_ = str(d).strip()
     mes_ = str(m).strip()
-    año_ = str(a).strip()
+    anno_ = str(a).strip()
     # día
     if len(dia_) < 2:
         dia_ = "0" + dia_
@@ -284,11 +288,12 @@ def fecha(d, m, a):
     if len(mes_) < 2:
         mes_ = "0" + mes_
     # año
-    for i in range(len(año_), 4):
-        año_ = "0" + año_
-    return año_ + mes_ + dia_
+    for i in range(len(anno_), 4):
+        anno_ = "0" + anno_
+    return anno_ + mes_ + dia_
 
-def dias_mes_año(fecha_):
+
+def dias_mes_anno(fecha_):
     """
     Esta función se usará para simplificar otras funciones que requieren saber
     el número de días de cada mes y se complican al tener en cuenta el 29 de febrero
@@ -296,12 +301,12 @@ def dias_mes_año(fecha_):
     @param fecha_
     @return vector con los días de cada mes para el año de fecha_
     Test:
-    >>> dias_mes_año("20200106")    # bisiesto
+    >>> dias_mes_anno("20200106")    # bisiesto
     [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    >>> dias_mes_año("20190102")    # no es bisiesto
+    >>> dias_mes_anno("20190102")    # no es bisiesto
     [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     """
-    dias_mes_este_año = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    dias_mes_este_anno = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     if es_bisiesto(fecha_):
-        dias_mes_este_año[1] += 1  # hay 29 días en febrero en este caso
-    return dias_mes_este_año
+        dias_mes_este_anno[1] += 1  # hay 29 días en febrero en este caso
+    return dias_mes_este_anno
