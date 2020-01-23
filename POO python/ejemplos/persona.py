@@ -14,7 +14,8 @@ class Persona:
         self.tiene_gafas = tiene_gafas
 
     def cumple_annos(self):
-        return self.edad + 1
+        self.edad = self.edad + 1
+        return self.edad
 
     def comer(self, comida):
         print(f"estoy comiendo {comida}")

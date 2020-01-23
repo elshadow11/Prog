@@ -1,4 +1,4 @@
-package ejemplos;
+package practica;
 
 public class Rectangulo{
 	/**
