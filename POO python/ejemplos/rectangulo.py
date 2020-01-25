@@ -109,7 +109,7 @@ class Rectangulo:
         :param other: Valor entero positivo
         :return: Otrorectángulo con la superficie original * other.
         """
-        assert type(other) == type(1) and other > 0  # operando corecto
+        assert type(other) == type(1) and other > 0  # operando correcto
         assert self.base * other <= Rectangulo.lado_maximo or self.altura * other <= Rectangulo.lado_maximo
         if self.base * other <= Rectangulo.lado_maximo:
             return Rectangulo(self.base * other, self.altura)

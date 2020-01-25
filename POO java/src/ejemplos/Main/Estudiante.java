@@ -1,8 +1,8 @@
-package ejemplos;
+package ejemplos.Main;
 
-import ejemplos.Persona.Persona;
+import ejemplos.Main.Persona.Persona;
 
-public class Estudiante extends Persona{
+public class Estudiante extends Persona {
 
 	public Estudiante(String nombre, boolean pelo) {
 		super(nombre, pelo);

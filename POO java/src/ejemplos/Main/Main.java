@@ -1,8 +1,8 @@
-package ejemplos;
+package ejemplos.Main;
 
-import ejemplos.Persona.Persona;
+import ejemplos.Main.Persona.Persona;
 
-class Main{
+class Main {
 	public static void Main(String[]args){
 		
 		Persona p1 = new Persona("Paco", true);
@@ -16,6 +16,12 @@ class Main{
 		
 		Estudiante e1 = new Estudiante("ramon", false);
 		e1.dormir();
+		
+		Persona portavoz = new Persona("Firulais", true);
+		portavoz.dormir();
+		
+		PartidoPolitico PACMA = new PACMA();
+		PACMA.portavoz.cumplirAnos(11);
 		
 	}
 }

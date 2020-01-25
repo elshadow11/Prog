@@ -1,6 +1,6 @@
-package ejemplos.Persona;
+package ejemplos.Main.Persona;
 
-public class Persona{
+public class Persona {
 	
 	private boolean pelo = true;
 	protected String nombre;
