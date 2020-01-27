@@ -88,7 +88,7 @@ class Fraccion:
         """
         return f"{self.__num}/{self.__den}"
 
-    def mod_fraccion(self):
+    def modificar_fraccion(self):
         """
         Metodo para modificar numerador y denominador,
         :return:
@@ -105,7 +105,7 @@ class Fraccion:
         self.__den = d
         print(f"La nueva fracción es {self}")
 
-    def mod_excepcion(self):
+    def modificar_fracciones(self):
         """
         Metodo para modificar numerador y denominador,
         :return:
@@ -134,7 +134,7 @@ class Fraccion:
         """
         return self.resultado() * n1
 
-    def mul_f(self):
+    def multiplicar_fraccion(self):
         """
         Metodo para multiplicar fracciones
         :return:
@@ -146,7 +146,7 @@ class Fraccion:
         f3 = Fraccion(num3, den3)
         return f3
 
-    def rest_f(self):
+    def restar_fraccion(self):
         """
         Metodo para restar fracciones
         :return:
@@ -164,7 +164,7 @@ class Fraccion:
         f3 = Fraccion(num3, den3)
         return f3
 
-    def sum_f(self):
+    def sumar_fraccion(self):
         """
         Metodo para sumar fracciones
         :return:
@@ -181,3 +181,6 @@ class Fraccion:
             num3 = (den3 / self.den) * self.num + (den3 / f2.den) * f2.num
         f3 = Fraccion(num3, den3)
         return f3
+
+    def simplificar_fraccion(self):
+        return f"{self.__den / mcd(self.__den, self.__num)} / {self.__num / mcd(self.__den, self.__num)}"
