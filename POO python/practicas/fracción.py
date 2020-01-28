@@ -51,8 +51,8 @@ class Fraccion:
         :param num:
         :param den:
         """
-        self.__num = num
-        self.__den = den
+        self.__num = int(num)
+        self.__den = int(den)
 
     # Propiedades
 
@@ -177,10 +177,10 @@ class Fraccion:
             num3 = self.__num + f2.num
 
         else:
-            den3 = mcm(self.__den, f2.den)
-            num3 = (den3 / self.den) * self.num + (den3 / f2.den) * f2.num
+            den3 = int(mcm(self.__den, f2.den))
+            num3 = int((den3 / self.den) * self.num + (den3 / f2.den) * f2.num)
         f3 = Fraccion(num3, den3)
         return f3
 
     def simplificar_fraccion(self):
-        return f"{self.__den / mcd(self.__den, self.__num)} / {self.__num / mcd(self.__den, self.__num)}"
+        return f"{int(self.__den / mcd(self.__den, self.__num))}/{int(self.__num / mcd(self.__den, self.__num))} "
