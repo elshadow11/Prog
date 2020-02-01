@@ -23,62 +23,75 @@ También vamos a hacer las pruebas usando el módulo doctest:
 
 class Fecha:
 
-    def __init__(self, dia, mes, anno):
+    def __init__(self, value):
         """
         Constructor de clase
-        :param dia:
-        :param mes:
-        :param anno:
+        :param value:
         """
-        self.__dia = dia
-        self.__mes = mes
-        self.__anno = anno
+        flag = True
+        for i in range(len(value)):
+            c = value[i]
+            if c < '0' or c > '9':
+                flag = False
+                break
+        if flag:
+            self.__dia = int(value[6:8])
+            self.__mes = int(value[4:6])
+            self.__anno = int(value[0:4])
+        else:
+            self.__dia = 0
+            self.__mes = 0
+            self.__anno = 0
 
     # Propiedades de clase
     @property
-    def __dia(self):
+    def dia(self):
         return self.__dia
 
-    @__dia.setter
-    def __dia(self, value):
-        self.__dia = int(value[6:8])
+    @dia.setter
+    def dia(self, value):
+        self.__dia = value
 
     @property
-    def __mes(self):
+    def mes(self):
         return self.__mes
 
-    @__mes.setter
-    def __mes(self, value):
-        self.__mes = int(value[4:6])
+    @mes.setter
+    def mes(self, value):
+        self.__mes = value
 
     @property
-    def __anno(self):
+    def anno(self):
         return self.__anno
 
-    @__anno.setter
-    def __anno(self, value):
-        self.__anno = int(value[0:4])
+    @anno.setter
+    def anno(self, value):
+        self.__anno = value
 
     # Métodos
     @staticmethod
-    def compara_fechas(fecha1, fecha2):
+    def fecha_cadena(anno, mes, dia):
         """
-        Recibe dos fechas y devuelve un valor negativo si la 1º es anterior a la 2º,
-        cero si son iguales, y un valor positivo si la 1º es posterior a la segunda.
-        @param fecha1
-        @param fecha2
-        @return entero negativo, cero o un entero positivo.
+        Devuelve una cadena en formato AAAAMMDD
         Test:
-        >>> Fecha.compara_fechas("20191231", "20191231")
-        0
-        >>> Fecha.compara_fechas("20200106", "20200101") > 0
-        True
-        >>> Fecha.compara_fechas("20200101", "20200106") < 0
-        True
+        >>> Fecha.fecha_cadena(6, 1, 2020)
+        '20200106'
         """
-        return int(fecha1) - int(fecha2)
+        dia_ = str(dia).strip()
+        mes_ = str(mes).strip()
+        anno_ = str(anno).strip()
+        # día
+        if len(dia_) < 2:
+            dia_ = "0" + dia_
+        # mes
+        if len(mes_) < 2:
+            mes_ = "0" + mes_
+        # año
+        for i in range(len(anno_), 4):
+            anno_ = "0" + anno_
+        return anno_ + mes_ + dia_
 
-    def es_bisiesto(self, fecha):
+    def es_bisiesto(self):
         """
         Dice si la fecha que se pasa como parámetro es de un año bisiesto.S
         @return verdadero o falso
@@ -91,15 +104,13 @@ class Fecha:
         False
         >>> self.es_bisiesto("01021900") # múltiplo de 4 pero acaba en 00 y no es múltiplo de 400
         False
-        :param fecha:
         """
-        anno = self.__anno(fecha)
+        anno = self.__anno
         return anno % 4 == 0 and (anno % 100 != 0 or anno % 400 == 0)
 
-    def fecha_correcta(self, fecha):
+    def fecha_correcta(self):
         """
         Dice si la fecha que se pasa como parámetro es correcta.
-        @param fecha
         @return verdadero o falso.
         Test:
         >>> self.fecha_correcta("20191215")
@@ -117,6 +128,7 @@ class Fecha:
         >>> self.fecha_correcta("20000229")  # fue bisiesto
         True
         """
+        fecha = self.fecha()
         # tiene que tener longitud 8
         if len(fecha) != 8:
             return False
@@ -127,23 +139,22 @@ class Fecha:
             if c < '0' or c > '9':
                 return False
         # El mes tiene que estar entre 1 y 12
-        mes = self.__mes(fecha)
+        mes = self.__mes
         if mes < 1 or mes > 12:
             return False
         # Si es año bisiesto el nº de días de febrero es 29.
         # Llamo a una función que me actualiza el nº de días de febrero si es bisiesto
-        dias_mes_este_anno = self.dias_mes_anno(fecha)
-        dia = self.__dia(fecha)
+        dias_mes_este_anno = self.dias_mes_anno()
+        dia = self.__dia
         # esta expresión lógica la permite python, equivale a:
         #   dia_>0 and dia_<=dias_mes_este_año[mes-1]
         return 0 < dia <= dias_mes_este_anno[mes - 1]  # restamos 1 al mes para que esté entre 0 y 11
 
-    def dias_mes_anno(self, fecha_):
+    def dias_mes_anno(self):
         """
         Esta función se usará para simplificar otras funciones que requieren saber
         el número de días de cada mes y se complican al tener en cuenta el 29 de febrero
         de los años bisiestos.
-        @param fecha_
         @return vector con los días de cada mes para el año de fecha_
         Test:
         >>> self.dias_mes_anno("20200106")    # bisiesto
@@ -152,11 +163,11 @@ class Fecha:
         [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         """
         dias_mes_este_anno = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        if self.es_bisiesto(fecha_):
+        if self.es_bisiesto():
             dias_mes_este_anno[1] += 1  # hay 29 días en febrero en este caso
         return dias_mes_este_anno
 
-    def fecha_formateada(self, fecha):
+    def fecha_formateada(self):
         """
         Recibe un fecha y devuelve una cadena con el formato DD de {MES} de AAAA
         (Ejemplo: "15 de Diciembre de 2019")
@@ -164,13 +175,12 @@ class Fecha:
         Test:
         >>> self.fecha_formateada("20191215")
         '15 de Diciembre de 2019'
-        :param fecha:
         """
-        dia = self.__dia(fecha)
-        anno = self.__anno(fecha)
-        return str(dia) + " de " + self.nombre_mes(fecha) + " de " + str(anno)
+        dia = self.__dia
+        anno = self.__anno
+        return str(dia) + " de " + self.nombre_mes() + " de " + str(anno)
 
-    def nombre_mes(self, fecha):
+    def nombre_mes(self):
         """
         Devuelve el nombre del mes de la fecha.
         @return nombre del mes
@@ -180,13 +190,12 @@ class Fecha:
         """
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
                  "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-        mes = self.__mes(fecha)
+        mes = self.__mes
         return meses[mes - 1]
 
-    def fecha_mas_1dia(self, fecha):
+    def fecha_mas_1dia(self):
         """
         Suma un día a la fecha que se pasa como parámetro y la devuelve.
-        @param fecha
         @return nuevo fecha
         Test:
         >>> self.fecha_mas_1dia("20160228")
@@ -194,10 +203,10 @@ class Fecha:
         >>> self.fecha_mas_1dia("20170228")
         '20170301'
         """
-        dia = self.__dia(fecha)
-        mes = self.__mes(fecha)
-        anno = self.__anno(fecha)
-        dias_mes_este_anno = self.dias_mes_anno(fecha)
+        dia = self.__dia
+        mes = self.__mes
+        anno = self.__anno
+        dias_mes_este_anno = self.dias_mes_anno()
 
         # aumentamos el día
         ultimo_dia_mes = dias_mes_este_anno[mes - 1]
@@ -209,12 +218,15 @@ class Fecha:
             if mes > 12:  # nos pasamos de diciembre, año siguiente
                 mes = 1
                 anno += 1
-        return fecha(dia, mes, anno)
+        self.__dia = dia
+        self.__mes = mes
+        self.__anno = anno
 
-    def fecha_mas_n_dias(self, fecha, dias):
+        return self.fecha()
+
+    def fecha_mas_n_dias(self, dias):
         """
         Suma una serie de días a la fecha que se pasa como parámetro y la devuelve.
-        @param fecha
         @param dias
         @return nueva fecha
         Test:
@@ -223,19 +235,18 @@ class Fecha:
         >>> self.fecha_mas_n_dias("20160228", -5)
         '20160223'
         """
-        fecha2 = fecha
+        fecha2 = self.fecha
         if dias >= 0:
             for i in range(dias):
-                fecha2 = self.fecha_mas_1dia(fecha2)
+                fecha2 = self.fecha_mas_1dia()
         else:
             for i in range(abs(dias)):
-                fecha2 = self.fecha_menos_1dia(fecha2)
+                fecha2 = self.fecha_menos_1dia()
         return fecha2
 
-    def fecha_menos_1dia(self, fecha):
+    def fecha_menos_1dia(self):
         """
         Resta un día a la fecha que se pasa como parámetro y la devuelve.
-        @param fecha
         @return nuevo fecha
         Test:
         >>> self.fecha_menos_1dia("20160301")
@@ -243,10 +254,10 @@ class Fecha:
         >>> self.fecha_menos_1dia("20170301")
         '20170228'
         """
-        dia = self.__dia(fecha)
-        mes = self.__mes(fecha)
-        anno = self.__anno(fecha)
-        dias_mes_este_anno = self.dias_mes_anno(fecha)
+        dia = self.__dia
+        mes = self.__mes
+        anno = self.__anno
+        dias_mes_este_anno = self.dias_mes_anno()
         # disminuimos el día
         dia -= 1
         if dia == 0:  # mes anterior y último día de mes
@@ -255,12 +266,16 @@ class Fecha:
                 mes = 12
                 anno -= 1
             dia = dias_mes_este_anno[mes - 1]  # último día del mes anterior
-        return fecha(dia, mes, anno)
 
-    def fecha_menos_n_dias(self, fecha, dias):
+        self.__dia = dia
+        self.__mes = mes
+        self.__anno = anno
+
+        return self.fecha()
+
+    def fecha_menos_n_dias(self, dias):
         """
         Resta una serie de días a la fecha que se pasa como parámetro y la devuelve.
-        @param fecha
         @param dias
         @return nuevo fecha
         Test:
@@ -269,11 +284,36 @@ class Fecha:
         >>> self.fecha_menos_n_dias("20170301", -5)
         '20170306'
         """
-        fecha2 = fecha
+        fecha2 = self.fecha
         if dias >= 0:
             for i in range(dias):
-                fecha2 = self.fecha_menos_1dia(fecha2)
+                fecha2 = self.fecha_menos_1dia()
         else:
             for i in range(abs(dias)):
-                fecha2 = self.fecha_mas_1dia(fecha2)
+                fecha2 = self.fecha_mas_1dia()
         return fecha2
+
+    def fecha(self):
+        """
+        Devuelve una cadena en formato AAAAMMDD
+        Test:
+        >>> self.fecha(6, 1, 2020)
+        '20200106'
+        """
+        return self.fecha_cadena(self.__anno, self.__mes, self.__dia)
+
+    def compara_fechas(self, fecha2):
+        """
+        Recibe dos fechas y devuelve un valor negativo si la 1º es anterior a la 2º,
+        cero si son iguales, y un valor positivo si la 1º es posterior a la segunda.
+        @param fecha2
+        @return entero negativo, cero o un entero positivo.
+        Test:
+        >>> Fecha.compara_fechas(self, fecha2)
+        0
+        >>> Fecha.compara_fechas(self, fecha2) > 0
+        True
+        >>> Fecha.compara_fechas(self, fecha2) < 0
+        True
+        """
+        return int(self.fecha()) - int(fecha2.fecha())
