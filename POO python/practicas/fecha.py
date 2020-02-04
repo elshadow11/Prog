@@ -69,6 +69,7 @@ class Fecha:
         self.__anno = value
 
     # Métodos
+    
     @staticmethod
     def fecha_cadena(anno, mes, dia):
         """
@@ -218,11 +219,8 @@ class Fecha:
             if mes > 12:  # nos pasamos de diciembre, año siguiente
                 mes = 1
                 anno += 1
-        self.__dia = dia
-        self.__mes = mes
-        self.__anno = anno
 
-        return self.fecha()
+        return self.fecha_cadena(anno, mes, dia)
 
     def fecha_mas_n_dias(self, dias):
         """
@@ -239,9 +237,11 @@ class Fecha:
         if dias >= 0:
             for i in range(dias):
                 fecha2 = self.fecha_mas_1dia()
+
         else:
             for i in range(abs(dias)):
                 fecha2 = self.fecha_menos_1dia()
+
         return fecha2
 
     def fecha_menos_1dia(self):
@@ -267,11 +267,7 @@ class Fecha:
                 anno -= 1
             dia = dias_mes_este_anno[mes - 1]  # último día del mes anterior
 
-        self.__dia = dia
-        self.__mes = mes
-        self.__anno = anno
-
-        return self.fecha()
+        return self.fecha_cadena(anno, mes, dia)
 
     def fecha_menos_n_dias(self, dias):
         """
