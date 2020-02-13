@@ -41,7 +41,6 @@ class Fecha:
         return meses[mes - 1]
 
     def __suma_1dia(self):
-
         dia = self.__dia + 1
         mes = self.__mes
         anyo = self.__anyo
@@ -57,7 +56,6 @@ class Fecha:
         return Fecha(dia, mes, anyo)
 
     def __resta_1dia(self):
-
         dia = self.__dia - 1
         mes = self.__mes
         anyo = self.__anyo
@@ -70,22 +68,36 @@ class Fecha:
             dia = Fecha.dias_mes(mes, anyo)
         return Fecha(dia, mes, anyo)
 
+    def clona(self):
+        return Fecha(self.__dia, self.__mes, self.__anyo)
+
     # Sobrecarga
     def __str__(self):
-
         return f"{self.dia} de {self.nombre_mes()} del {self.anyo} "
 
-    def __gt__(self, other):
-        pass
+    def __gt__(self, fecha2):
+        if self.__anyo != fecha2.__anyo:
+            return self.__anyo > fecha2.__anyo
+        else:
+            if self.__mes != fecha2.__mes:
+                return self.__mes > fecha2.__mes
+            else:
+                return self.__dia > fecha2.__dia
 
-    def __lt__(self, other):
-        pass
+    def __ge__(self, fecha2):
+        if self.__anyo != fecha2.__anyo:
+            return self.__anyo >= fecha2.__anyo
+        else:
+            if self.__mes != fecha2.__mes:
+                return self.__mes >= fecha2.__mes
+            else:
+                return self.__dia >= fecha2.__dia
 
-    def __eq__(self, other):
-        pass
+    def __eq__(self, fecha2):
+        return self.__dia == fecha2.dia and self.__mes == fecha2.__mes and self.__dia == fecha2.__dia
 
     def __add__(self, n):
-        f = self
+        f = self.clona
         if n > 0:
             for i in range(n):
                 f = f.__suma_1dia()
@@ -98,7 +110,7 @@ class Fecha:
         return self + n
 
     def __sub__(self, n):
-        return self + -1*n
+        return self + -1 * n
 
     # Metodos estáticos
     @staticmethod
@@ -116,17 +128,14 @@ class Fecha:
             return False
 
         dias_mes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
         if Fecha.es_bisiesto(anyo):
             dias_mes[1] = 29
-            return dia > 0 and dias_mes[mes - 1]
 
-    @staticmethod
-    def comparar_fechas(fecha1, fecha2):
-        int(fecha1) - int(fecha2)
+        return dia > 0 and dias_mes[mes - 1]
 
     @staticmethod
     def dias_mes(mes, anyo):
-
         dias_mes_ = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         if Fecha.es_bisiesto(anyo):
             dias_mes_[1] += 29  # hay 29 días en febrero en este caso
